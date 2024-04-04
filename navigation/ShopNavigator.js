@@ -14,6 +14,7 @@ import language from '../components/UI/language';
 import Login from '../screens/Auth/Login';
 import PhoneLogin from '../screens/Auth/PhoneLogin';
 import Signup from '../screens/Auth/Signup';
+import ForgetPassword from '../components/UI/ForgetPassword';
 
 export default function ShopNavigator() {
 
@@ -27,7 +28,8 @@ export default function ShopNavigator() {
 
       <Stack.Navigator>
 
-        {/* <Stack.Screen name="PhoneLogin" component={PhoneLogin} /> */}
+        <Stack.Screen name="ForgotPassword" component={ForgetPassword} />
+        <Stack.Screen name="PhoneLogin" component={PhoneLogin} />
         <Stack.Screen name='Signup' component={Signup} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name='Role' component={Role} options={{headerShown:false}} />

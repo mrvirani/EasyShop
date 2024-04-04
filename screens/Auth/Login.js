@@ -23,7 +23,7 @@ const Login = (props) => {
       {/* {console.log(require("../../images/Welcome-amico.png"))} */}
 
       <TouchableOpacity style={styles.lointBtnContainer}>
-        <CustomeButton style={styles.loginBtn} onPress={() =>  props.navigation.navigate('PhoneLogin') }>Login with Phone Number</CustomeButton>
+        <CustomeButton style={styles.loginBtn} onPress={() => props.navigation.navigate('PhoneLogin')}>Login with Phone Number</CustomeButton>
       </TouchableOpacity>
 
 
