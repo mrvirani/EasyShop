@@ -15,6 +15,11 @@ import Login from '../screens/Auth/Login';
 import PhoneLogin from '../screens/Auth/PhoneLogin';
 import Signup from '../screens/Auth/Signup';
 import ForgetPassword from '../components/UI/ForgetPassword';
+import Otp from '../components/UI/Otp';
+import Rewards from '../components/UI/Rewards';
+
+
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default function ShopNavigator() {
 
@@ -27,14 +32,23 @@ export default function ShopNavigator() {
 
 
       <Stack.Navigator>
-
-        <Stack.Screen name="ForgotPassword" component={ForgetPassword} />
-        <Stack.Screen name="PhoneLogin" component={PhoneLogin} />
-        <Stack.Screen name='Signup' component={Signup} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        
         <Stack.Screen name='Role' component={Role} options={{headerShown:false}} />
         <Stack.Screen name="language" component={language} />
-        <Stack.Screen name='onBoard' component={OnboardingScreen} />
+        <Stack.Screen name='onBoard' component={OnboardingScreen}  
+          options={{
+            headerRight:()=>
+                 <Text style={{paddingRight:10, color:'black', fontSize:16}}>Skip</Text>,
+            headerTitle:""
+            
+          }}
+        />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="PhoneLogin" component={PhoneLogin} />
+        <Stack.Screen name="Otp" component={Otp} />
+        <Stack.Screen name='Signup' component={Signup} />
+        <Stack.Screen name="ForgotPassword" component={ForgetPassword} />
+        <Stack.Screen name="Rewards" component={Rewards}  options={{headerShown:false}}/>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Orders" component={Orders} />
         <Stack.Screen name="Explore" component={Explore} />

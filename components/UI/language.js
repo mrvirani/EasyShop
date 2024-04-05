@@ -48,7 +48,7 @@ const language = (props) => {
       </View>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',  }}>
 
-        <CustomeButton style={{ margin: 20, height: 50, marginVertical: 10 }}>Continue</CustomeButton>
+        <CustomeButton onPress={()=>props.navigation.navigate('onBoard')} style={{ margin: 20, height: 50, marginVertical: 10 }} >Continue</CustomeButton>
       </View>
     </View>
   )

@@ -77,7 +77,7 @@ const PhoneLogin = (props) => {
                         setValid(checkValid ? checkValid : false)
                         setShowMessage(true)
                         if (valid === true) {
-                            props.navigation.navigate('Home')
+                            props.navigation.navigate('Otp')
                         }
                     }}
                         style={{ height: 50 }}

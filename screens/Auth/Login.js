@@ -62,7 +62,7 @@ const Login = (props) => {
 
       <View style={styles.createPassContainer}>
         <Text onPress={() => { console.log("Don't have an Account?") }}>Don't have an Account? </Text>
-        <Text onPress={() => { console.log("Create One") }} style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>Create One</Text>
+        <Text onPress={() => props.navigation.navigate('Signup')} style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>Create One</Text>
       </View>
 
     </View>

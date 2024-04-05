@@ -5,6 +5,7 @@ import React, { useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { SLIDES } from './data/dummydata'
+import CustomeButton from '../../components/CustomeButton'
 
 const { width, height } = Dimensions.get('window')
 
@@ -12,11 +13,8 @@ export const COLORS = { primary: '#282534', white: 'fff' }
 
 
 
-
-
-
 const Slide = ({ item }) => {
-    return <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+    return <View style={{ width, alignItems: 'center', justifyContent: 'center', marginTop: 100 }}>
         <Image source={item.images} style={{ height: '75%', width, resizeMode: 'contain' }} />
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.subtitle}>{item.subtitle}</Text>
@@ -24,7 +22,7 @@ const Slide = ({ item }) => {
 }
 
 
-const OnboardingScreen = ({ navigation }) => {
+const OnboardingScreen = ({ props, navigation }) => {
 
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
@@ -44,7 +42,7 @@ const OnboardingScreen = ({ navigation }) => {
             }}>
 
                 {SLIDES.map((_, index) => (
-                    <View key={index} style={[styles.indicator, currentSlideIndex === index && { backgroundColor: '#FB5193', width: 25, height: 2 }]}>
+                    <View key={index} style={[styles.indicator, currentSlideIndex === index && { backgroundColor: '#FB5193', }]}>
 
                     </View>
                 ))}
@@ -52,9 +50,10 @@ const OnboardingScreen = ({ navigation }) => {
 
             </View>
 
-            <View style={{ marginBottom: 20 }}>
+            <View style={{ marginBottom: 20, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-                <Button title="Next" onPress={GotoNextScreen} />
+                <CustomeButton onPress={handleLastButtonClick} style={{ marginTop: 40, padding: 15 }}>{currentSlideIndex === SLIDES.length - 1 ? "Let's Explore" : "Next"}</CustomeButton>
+
 
             </View>
 
@@ -66,7 +65,7 @@ const OnboardingScreen = ({ navigation }) => {
     const udatedCurrentSlideIndex = e => {
         const contentoffsetX = e.nativeEvent.contentOffset.x // width off device in
 
-        console.log(contentoffsetX)
+        // console.log(contentoffsetX)
 
         const currentIndex = Math.round(contentoffsetX / width)
         setCurrentSlideIndex(currentIndex)
@@ -85,32 +84,42 @@ const OnboardingScreen = ({ navigation }) => {
     }
 
     const skip = () => {
-        props.navigation.navigate('Login')
+        navigation.navigate('Home')
+    }
+
+
+    const handleLastButtonClick = () => {
+        if (currentSlideIndex === SLIDES.length - 1) {
+           
+            navigation.navigate('Login');
+        } else {
+          
+           GotoNextScreen()
+        }
     }
 
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
 
             <StatusBar backgroundColor='white' />
             <FlatList
                 ref={ref}
                 onMomentumScrollEnd={udatedCurrentSlideIndex}  // 1 var scroll thase tyre
                 data={SLIDES}
-                pagingEnabled  // full page slide thase
+                pagingEnabled={true}  // full page slide thase
                 contentContainerStyle={{ height: height * 0.75 }}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => <Slide item={item} />} />
+                renderItem={({ item }) => <Slide item={item}
+                />} />
 
             <Footer />
 
 
 
-
-
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -129,6 +138,7 @@ const styles = StyleSheet.create({
     subtitle: {
         // width:'55%',
         maxWidth: '70%',
+        height: 160,
         fontSize: 18,
         marginTop: 10,
         textAlign: 'center',
@@ -138,11 +148,14 @@ const styles = StyleSheet.create({
     },
 
     indicator: {
-        height: 2.5,
-        width: 10,
-        backgroundColor: 'gray',
+        // height: 2.5,
+        // width: 10,
+        marginTop: 50,
+        backgroundColor: '#e0dede',
         marginHorizontal: 3,
-        borderRadius: 2
+        borderRadius: 2,
+        width: 20,
+        height: 5
     }
 
 })

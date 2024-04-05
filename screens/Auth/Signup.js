@@ -53,8 +53,11 @@ const Signup = (props) => {
 
     // console.log(validationSchema)
 
-    const SubmitHandler = (values) => {
+    const SubmitHandler = async (values) => {
 
+       
+        console.log(value)
+        values.phoneNumber = value
         console.log(values)
 
         const checkValid = phoneInput.current?.isValidNumber(value)
@@ -83,7 +86,7 @@ const Signup = (props) => {
 
                 <View style={styles.container}>
                     <Formik
-                        initialValues={{ firstName: '', lastName: '', password: '' }}
+                        initialValues={{ firstName: '', lastName: '',phoneNumber: '', password: '' }}
                         validationSchema={Validation}
                         onSubmit={SubmitHandler}
                     >
@@ -134,18 +137,20 @@ const Signup = (props) => {
                                     <PhoneInput
                                         ref={phoneInput}
                                         defaultCode='IN'
-                                        // defaultValue= {}
+                                        defaultValue= {value}
                                         onChangeText={(text) => setValue(text)}
                                         onChangeFormattedText={(text) => setFormatedNumber(text)}
                                         withShadow
                                         containerStyle={{
                                             width: '100%',
-                                            height: 70,
+                                            height: 50,
                                             borderRadius: 50,
+                                            marginBottom: 10,
                                             backgroundColor: '#eae3e3',
                                         }}
-                                        textContainerStyle={{ borderRadius: 50, backgroundColor: 'green' }}
-                                        textInputStyle={{ color: 'black', backgroundColor: 'red', }}
+                                        textContainerStyle={{ borderRadius: 50, backgroundColor: '#eae3e3' }}
+                                        textInputStyle={{ color: 'black', padding: -40, marginTop: -10, marginBottom: -13 }}
+                                 
                                     />
                                 </View>
 
