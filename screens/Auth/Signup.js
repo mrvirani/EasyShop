@@ -1,4 +1,4 @@
-import { Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 
 import { Formik } from 'formik';
@@ -13,21 +13,34 @@ import PhoneInput from "react-native-phone-number-input";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import CustomeButton from '../../components/CustomeButton';
+import Input from '../../components/UI/Input';
+
+import { useDispatch } from 'react-redux'
+
+import * as AuthAction from '../../store/Actions/Auth'
+
+
 
 
 
 const Signup = (props) => {
 
+
+
     //     const [password, setPassword] = useState('');  
     // const [isPasswordSecure, setIsPasswordSecure] = useState(true);
 
-    const [value, setValue] = useState('')
-    const [formatedNumber, setFormatedNumber] = useState('')
-    const [validate, setValidate] = useState(false)
+    const [value, setValue] = useState('') //phone number set kare chhe 9909588273
+    const [formatedNumber, setFormatedNumber] = useState('')    // 91 9909588273
+    const [validate, setValidate] = useState(false)  // based on library of REACT_NATIVE_PHONE_NUMBER_INPUT
     const phoneInput = useRef()
 
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)   
     const [checkBox, setCheckBox] = useState(false)
+
+
+    const dispatch = useDispatch()
+
 
 
     const Validation = Yup.object({
@@ -47,28 +60,44 @@ const Signup = (props) => {
             .matches(/(?=.*[0-9])/, 'Password must contain a number.')
             .matches(/(?=.*[a-z])/, 'Password must contain a lowercase letter.')
             .matches(/(?=.*[A-Z])/, 'Password must contain an uppercase letter.')
-            .matches(/(?=.*[!@#$%^&*])/, 'Password must contain a non-alphanumeric character.')
+            // .matches(/(?=.*[!@#$%^&*])/, 'Password must contain a non-alphanumeric character.')
             .required('Password is Required'),
     });
 
     // console.log(validationSchema)
 
-    const SubmitHandler = async (values) => {
-
-       
-        console.log(value)
+    const SubmitHandler = async (values, actions) => {
+        const checkValid = phoneInput.current?.isValidNumber(values.phoneNumber);
+        const country_code = "+" + phoneInput.current?.getCallingCode();
+        values.country_code = country_code
         values.phoneNumber = value
-        console.log(values)
 
-        const checkValid = phoneInput.current?.isValidNumber(value)
-        setValidate(checkValid ? checkValid : false)
+        let formData = new FormData();
+        formData.append('role', 1)
+        formData.append('email', values.email);
+        formData.append('password', values.password);
+        formData.append('country_code', values.country_code);
+        formData.append('phoneno', values.phoneNumber);
+        formData.append('firstname', values.firstName);
+        formData.append('lastname', values.lastName);
 
-        if (checkValid === true) {
-            props.navigation.navigate('Home')
-        }
+        console.log("country_code is=====>", values.country_code);
+        setValidate(checkValid ? checkValid : false);
 
 
+        await dispatch(AuthAction.signUp(formData));
+         props.navigation.navigate('Otp');
+
+        // if (checkValid === true) {
+        //     try {
+        //     } catch (error) {
+        //         console.error('Sign-up failed:', error);
+        //         // Handle sign-up failure, if needed
+        //     }
+        // }
     }
+
+
 
 
     return (
@@ -86,10 +115,10 @@ const Signup = (props) => {
 
                 <View style={styles.container}>
                     <Formik
-                        initialValues={{ firstName: '', lastName: '',phoneNumber: '', password: '' }}
+                        initialValues={{ firstName: '', lastName: '', phoneNumber: '', password: '' }}
                         validationSchema={Validation}
-                        onSubmit={SubmitHandler}
-                    >
+                        onSubmit={SubmitHandler}>
+
                         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                             <View>
 
@@ -104,6 +133,17 @@ const Signup = (props) => {
                                 {touched.firstName && errors.firstName ? (
                                     <Text style={styles.errorText}>{errors.firstName}</Text>
                                 ) : null}
+
+                                {/* <Input
+                            lable="First Name"
+                            onChangeText={handleChange('firstName')}
+                            onBlur={handleBlur('firstName')}
+                            value={value.firstName}
+                            placeholder="enter first Name"
+                            error={errors.firstName}
+                            touched={touched.firstName}
+                            /> */}
+
 
                                 <Text style={styles.titletxt}>Last Name</Text>
                                 <TextInput
@@ -137,7 +177,7 @@ const Signup = (props) => {
                                     <PhoneInput
                                         ref={phoneInput}
                                         defaultCode='IN'
-                                        defaultValue= {value}
+                                        defaultValue={value}
                                         onChangeText={(text) => setValue(text)}
                                         onChangeFormattedText={(text) => setFormatedNumber(text)}
                                         withShadow
@@ -150,7 +190,7 @@ const Signup = (props) => {
                                         }}
                                         textContainerStyle={{ borderRadius: 50, backgroundColor: '#eae3e3' }}
                                         textInputStyle={{ color: 'black', padding: -40, marginTop: -10, marginBottom: -13 }}
-                                 
+
                                     />
                                 </View>
 

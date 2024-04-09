@@ -36,4 +36,32 @@ export const SLIDES =[
 
 ]
 
+
+
+export const CUSTOMER_SLIDES =[
+  {
+    id:'1',
+    images: require('../../../images/Welcome-amico.png'),
+    title:'Welcome To EasyShop',
+    subtitle:'Organize your busuness so more people will reach out to you for your service!'
+  },
+  {
+    id:'2',
+    images:  require('../../../images/Userflow-pana.png'),
+    title:'Manage products',
+    subtitle:'You just need to tap onsearch and type and we will find similar product for you.'
+  },
+  {
+    id:'3',
+    images:  require('../../../images/AddtoCart-pana.png'),
+    title:'Manage Orders',
+    subtitle:'Easiest way of handlingthe orders that makes the Delivery process quickest!.'
+  },  {
+    id:'4',
+    images:  require('../../../images/Customerfeedback-pana.png'),
+    title:'Give feedback to customer',
+    subtitle:'You can choose payment method which you have added and make payment easily'
+  },
+]
+
 const styles = StyleSheet.create({})

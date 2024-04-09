@@ -4,12 +4,14 @@ import React, { useRef, useState } from 'react'
 // import { SLIDES } from './data/dummydata'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { SLIDES } from './data/dummydata'
+import { CUSTOMER_SLIDES, SLIDES } from './data/dummydata'
 import CustomeButton from '../../components/CustomeButton'
 
 const { width, height } = Dimensions.get('window')
 
 export const COLORS = { primary: '#282534', white: 'fff' }
+
+import { useRole } from '../../components/atoms/RoleProvider';
 
 
 
@@ -23,6 +25,9 @@ const Slide = ({ item }) => {
 
 
 const OnboardingScreen = ({ props, navigation }) => {
+
+    const { role, setRole } = useRole();
+    
 
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
@@ -107,7 +112,7 @@ const OnboardingScreen = ({ props, navigation }) => {
             <FlatList
                 ref={ref}
                 onMomentumScrollEnd={udatedCurrentSlideIndex}  // 1 var scroll thase tyre
-                data={SLIDES}
+                data={role === 1? SLIDES : CUSTOMER_SLIDES}
                 pagingEnabled={true}  // full page slide thase
                 contentContainerStyle={{ height: height * 0.75 }}
                 horizontal

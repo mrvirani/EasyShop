@@ -9,11 +9,21 @@ const Role = (props) => {
     const { width, height } = Dimensions.get('window')
 
     const [role, setRole] = useState('Customer')
+    const [passdata, setpassdata] = useState('1')
 
     const getButtonBackgroundColor = (currentButton) => {
         return role === currentButton
             ? currentButton === 'Customer' ? "#FB5193" : "#6A65F4"
             : "#efe8e8";
+    }
+
+    const SubmitHandler =()=>{
+
+        const roleValue = role === 'Customer' ? '1' : '2';
+    
+        props.navigation.navigate('Language', { passdata: roleValue });
+
+    
     }
 
     return (
@@ -40,13 +50,13 @@ const Role = (props) => {
             </View>
             <View style={{ height: height * 0.13 }}>
                 <CustomeButton
-                    onPress={() => props.navigation.navigate('language')}
+                    onPress={() =>SubmitHandler()}
                     style={{
                         padding: 18,
                         backgroundColor: role === 'Customer' ? "#FB5193" : "#6A65F4",
                         marginTop: 20,
-                    }}
-                >
+                    }}>
+
                     {`Continue as ${role}`} {/* Dynamically change the button text based on the role */}
                 </CustomeButton>
 
@@ -60,4 +70,6 @@ const Role = (props) => {
 
 export default Role
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    
+})

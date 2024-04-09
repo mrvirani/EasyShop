@@ -17,6 +17,23 @@ import Home from './screens/customers/Home';
 import ShopNavigator from './navigation/ShopNavigator';
 import SplashScreen from 'react-native-splash-screen';
 
+import {thunk} from 'redux-thunk' 
+import { createStore,combineReducers, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+
+import authReducer from './store/Reducers/Auth'
+import { RoleProvider } from './components/atoms/RoleProvider';
+
+
+
+const rootReducer = combineReducers({
+  auth: authReducer
+
+})
+
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+
 
 function App() {
 
@@ -29,10 +46,13 @@ function App() {
   
 
   return (
-
+<RoleProvider>
+    <Provider store={store}>
     
      <ShopNavigator/>
-    
+
+     </Provider>
+     </RoleProvider>
   );
 }
 
