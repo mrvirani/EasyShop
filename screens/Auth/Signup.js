@@ -66,7 +66,7 @@ const Signup = (props) => {
 
     // console.log(validationSchema)
 
-    const SubmitHandler = async (values, actions) => {
+    const SubmitHandler =  (values, actions) => {
         const checkValid = phoneInput.current?.isValidNumber(values.phoneNumber);
         const country_code = "+" + phoneInput.current?.getCallingCode();
         values.country_code = country_code
@@ -85,8 +85,10 @@ const Signup = (props) => {
         setValidate(checkValid ? checkValid : false);
 
 
-        await dispatch(AuthAction.signUp(formData));
-         props.navigation.navigate('Otp');
+         if(dispatch(AuthAction.signUp(formData))){
+
+             props.navigation.navigate('Otp');
+         }
 
         // if (checkValid === true) {
         //     try {

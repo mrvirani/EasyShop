@@ -11,7 +11,7 @@ const { width, height } = Dimensions.get('window')
 
 export const COLORS = { primary: '#282534', white: 'fff' }
 
-import { useRole } from '../../components/atoms/RoleProvider';
+import { useRole } from '../../components/UI/atoms/RoleSelector.js';
 
 
 

@@ -8,14 +8,49 @@ import PhoneInput from "react-native-phone-number-input";
 const { width, height } = Dimensions.get('window')
 
 
+import * as LoginAction from '../../store/Actions/Auth'
+import { useDispatch, useSelector } from 'react-redux';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
+
+
+
+
+
 
 const PhoneLogin = (props) => {
+
+    const dispatch = useDispatch()
 
     const [value, setValue] = useState('')
     const [formatedNumber, setFormatedNumber] = useState('')
     const [valid, setValid] = useState(false)
     const [showMessage, setShowMessage] = useState(false);
     const phoneInput = useRef()
+
+    const msg = useSelector(state => state.auth.msg)
+
+
+    const CreateAccountHandler =  (props) => {
+
+        const checkValid = phoneInput.current?.isValidNumber(value)
+        const country_code = "+" + phoneInput.current?.getCallingCode();
+        setValid(checkValid ? checkValid : false)
+        setShowMessage(true)
+
+        console.log("msg", msg)
+
+      
+       
+        // if (valid === true) {
+        //     props.navigation.navigate('Otp')
+        // }
+
+        console.log(country_code, "<====>", value)
+        if(dispatch(LoginAction.login(country_code, value))){
+            props.navigation.navigate('OtpLogin')
+        } 
+        
+    }
 
     return (
 
@@ -72,14 +107,7 @@ const PhoneLogin = (props) => {
             <View >
 
                 <View style={{ alignItems: 'center' }}>
-                    <CustomeButton onPress={() => {
-                        const checkValid = phoneInput.current?.isValidNumber(value)
-                        setValid(checkValid ? checkValid : false)
-                        setShowMessage(true)
-                        if (valid === true) {
-                            props.navigation.navigate('Otp')
-                        }
-                    }}
+                    <CustomeButton onPress={CreateAccountHandler}
                         style={{ height: 50 }}
                     ><Text >Send OTP</Text></CustomeButton>
                 </View>

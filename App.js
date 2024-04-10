@@ -22,7 +22,7 @@ import { createStore,combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 
 import authReducer from './store/Reducers/Auth'
-import { RoleProvider } from './components/atoms/RoleProvider';
+import { RoleProvider } from './components/UI/atoms/RoleSelector.js';
 
 
 

@@ -27,6 +27,7 @@ import Icons from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Feather from "react-native-vector-icons/Feather"
+import OtpLogin from '../components/UI/OtpLogin';
 
 
 const AuthNavigator = () => {
@@ -38,8 +39,8 @@ const AuthNavigator = () => {
     <NavigationContainer>
 
       <Stack.Navigator>
-
-        {/* <Stack.Screen name='Role' component={Role} options={{ headerShown: false }} />
+        {/* 
+        <Stack.Screen name='Role' component={Role} options={{ headerShown: false }} />
       <Stack.Screen name="Language" component={Language} />
       <Stack.Screen name='onBoard' component={OnboardingScreen}
         options={{
@@ -48,11 +49,12 @@ const AuthNavigator = () => {
           headerTitle: ""
 
         }}
-      />
-      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-      <Stack.Screen name="PhoneLogin" component={PhoneLogin} /> */}
-        <Stack.Screen name='Signup' component={Signup} />
-         <Stack.Screen name="Otp" component={Otp} />
+      /> */}
+        {/* <Stack.Screen name='Signup' component={Signup} /> */}
+        {/* <Stack.Screen name="PhoneLogin" component={PhoneLogin} /> */}
+        {/* <Stack.Screen name="Otp" component={Otp} /> */}
+        {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="OtpLogin" component={OtpLogin} />
         <Stack.Screen name="ForgotPassword" component={ForgetPassword} />
         <Stack.Screen name="Rewards" component={Rewards} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} />
