@@ -46,20 +46,20 @@ const Otp = ({ route }) => {
     const msg = useSelector(state => state.auth.msg) //Registration msg response data
     const statusCode = useSelector(state => state.auth.statusCode) //Registration status code response data
 
-    console.log("RegisterResData=====>", statusRegister, msg,statusCode)
+    console.log("RegisterResData=====>", statusRegister, msg, statusCode)
 
     const Resendmsg = useSelector(state => state.auth.Resendmsg) //REND status response data
     const ResendstatusCode = useSelector(state => state.auth.ResendstatusCode) //Resend msg response data
     const Resendotpid = useSelector(state => state.auth.Resendotpid) //RESEND status code response data
 
 
-    console.log("ResendResData=====>", Resendmsg, ResendstatusCode,Resendotpid)
+    console.log("ResendResData=====>", Resendmsg, ResendstatusCode, Resendotpid)
 
     const statusOfOtp = useSelector(state => state.auth.signUpData)    //response data of signup // user register karse tyarno
 
     console.log("statusOfOtp===>", statusOfOtp)
 
-    const STATUSOFOTP = useSelector(state => state.auth.status) 
+    const STATUSOFOTP = useSelector(state => state.auth.status)
 
     console.log("STATUSOFOTP====>", STATUSOFOTP)
 
@@ -91,7 +91,7 @@ const Otp = ({ route }) => {
         return PlacehoderDots
     }
 
-    const OtpVerifyHandler = (props) => {
+    const OtpVerifyHandler = async (props) => {
 
         let formData = new FormData();
 
@@ -106,19 +106,36 @@ const Otp = ({ route }) => {
         formData.append('otpid', statusOfOtp.data.otpid);
         formData.append('enteredotp', wholeOtp);
 
-        try{
-            if( dispatch(otpAction.verifyOtpRegister(formData))){
-                navigation.navigate('Login')
-    
+        try {
+
+             dispatch(otpAction.verifyOtpRegister(formData)).then((res) => {
+
+                console.log("hghdh", res)
+                if(res.status==='success'){
+                    navigation.navigate('Login')
+                    Alert.alert(res.msg)
+                }else{
+                    Alert.alert(res.msg)
+                }
+            })
+
+            if(wholeOtp === null){
+               ToastAndroid.showWithGravity('OTP is not properly field.', 'Please try again!!!')
             }
 
-        }catch(err){
-            console.error("Error verifying OTP:", error);
-            Alert.alert("Error", "An error occurred while verifying OTP. Please try again.");
-        }
-       
+            navigation.navigate('Login')
 
-       
+        } catch (error) {
+            if (error.message === "User registerd successfully✅") {
+                Alert.alert("Registration Successful", "You have successfully registered!");
+            } else {
+                // General error alert
+                Alert.alert("Registration Failed", error.message);
+            }
+        }
+
+
+
 
     };
 
@@ -142,9 +159,18 @@ const Otp = ({ route }) => {
 
     const ResendotpHandler = () => {
         console.log("hello")
-       
-            dispatch(otpAction.resendOtp(statusOfOtp.data.otpid))
-      
+
+        dispatch(otpAction.resendOtp(statusOfOtp.data.otpid)).then((res) => {
+
+            console.log("hghdh", res)
+            if(res.status==='success'){
+                navigation.navigate('Login')
+                Alert.alert('',res.msg)
+            }else{
+                Alert.alert(res.msg)
+            }
+        })
+
     }
 
 
@@ -225,10 +251,11 @@ const Otp = ({ route }) => {
 
 
             <View style={{ alignItems: 'center', marginBottom: 20 }}>
-                <CustomeButton style={{ padding: 15, 
+                <CustomeButton style={{
+                    padding: 15,
                     // backgroundColor: (statusOfOtp === null) ? "black" : "red"
-                 }} 
-                //  disabled={statusOfOtp === null} 
+                }}
+                    //  disabled={statusOfOtp === null} 
                     onPress={OtpVerifyHandler}>Verify Now</CustomeButton>
             </View>
 

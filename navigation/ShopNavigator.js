@@ -51,9 +51,9 @@ const AuthNavigator = () => {
         }}
       /> */}
         <Stack.Screen name='Signup' component={Signup} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="PhoneLogin" component={PhoneLogin} />
         <Stack.Screen name="Otp" component={Otp} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="OtpLogin" component={OtpLogin} />
         <Stack.Screen name="ForgotPassword" component={ForgetPassword} />
         <Stack.Screen name="Rewards" component={Rewards} options={{ headerShown: false }} />

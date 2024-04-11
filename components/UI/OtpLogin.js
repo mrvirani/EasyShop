@@ -31,7 +31,7 @@ const OtpLogin = ({ route, navigation }) => {
     const dispatch = useDispatch();
 
 
-  
+
 
 
 
@@ -58,7 +58,7 @@ const OtpLogin = ({ route, navigation }) => {
 
 
 
-    const OtpVerifyHandler =  (props) => {
+    const OtpVerifyHandler = (props) => {
 
         let formData = new FormData();
 
@@ -84,9 +84,22 @@ const OtpLogin = ({ route, navigation }) => {
 
         try {
 
-            if(dispatch(otpAction.verifyOtpLogin(formData))) {
-                navigation.navigate('Home');
-            }
+            dispatch(otpAction.verifyOtpLogin(formData)).then((res) => {
+
+                console.log("hghdh", res.msg)
+                if(res.status==='success'){
+                    navigation.navigate('Login')
+                    Alert.alert('',res.msg)
+                }else{
+                    Alert.alert(res.msg)
+                }
+            })
+
+         
+            //    if(wholeOtp === null){
+            //     ToastAndroid.showWithGravity('OTP is not properly field.', 'Please try again!!!')
+            //  }
+
             // if (STATUSOFOTPLOGIN === 'success') {
 
             //     navigation.navigate('Home');
@@ -95,8 +108,12 @@ const OtpLogin = ({ route, navigation }) => {
             // }
         } catch (error) {
 
-            console.error("Error verifying OTP:", error);
-            Alert.alert("Error", "An error occurred while verifying OTP. Please try again.");
+            if (error.message === "User registerd successfully✅") {
+                Alert.alert("Registration Successful", "You have successfully registered!");
+            } else {
+                // General error alert
+                Alert.alert("Registration Failed", error.message);
+            }
         }
 
 
@@ -154,7 +171,16 @@ const OtpLogin = ({ route, navigation }) => {
     const otpHandler = () => {
         console.log("hello otp login")
         console.log(LoginResData.data.otpid)
-        dispatch(otpAction.resendOtp(LoginResData.data.otpid))
+        dispatch(otpAction.resendOtp(LoginResData.data.otpid)).then((res) => {
+
+            console.log("hghdh", res)
+            if(res.status==='success'){
+                navigation.navigate('Home')
+                Alert.alert('',res.msg)
+            }else{
+                Alert.alert(res.msg)
+            }
+        })
     }
 
 

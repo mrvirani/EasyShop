@@ -30,37 +30,23 @@ export const signUp = (formdata) => {
 
         const resData = await response.json()
 
+        if(!response.ok){
+            // throw new Error('You have an Error in SignUp response ')
+            throw new Error(resData.msg || "An unexpected error occurred.");
+        }
 
         console.log("resData: signUP===>",resData)
 
-        
         dispatch({ type: SIGN_UP, resData, otpid:resData.data.otpid })
+        return  Promise.resolve(resData);
         }catch(err){
             console.error("You have error in SignUp", err);
+            return Promise.reject(err);
         }
-
-        
-
     }
 
 }
 
-// export const verifyOtpRegister = (formData) => {
-//     return async dispatch => {
-//         try {
-//             const response = await fetch('https://easyshop-5pbk.onrender.com/auth/register/verify-otp', {
-//                 method: 'POST',
-//                 body: formData,
-//             });
-//             const resData = await response.json();
-//             dispatch({ type: VERIFY_OTP_REGISTER, resData });
-//             return true; // Return true for success
-//         } catch (error) {
-//             console.error('Error during OTP verification:', error);
-//             return false; // Return false for failure
-//         }
-//     };
-// };
 
 export const verifyOtpRegister = (formdata) => {
 
@@ -76,14 +62,20 @@ export const verifyOtpRegister = (formdata) => {
             body: formdata,
         });
         const resData = await response.json();
+
+        
+        if(!response.ok){
+            throw new Error(resData.msg || 'An error occurred during registration.')
+        }
+
         dispatch({ type: VERIFY_OTP_REGISTER, resData , 
             msg:resData.msg, status:resData.status, statusCode: resData.statusCode});
+            return  Promise.resolve(resData);
 
     } catch (err) {
        console.error("You have an error in verify register otp ", err)
+       return Promise.reject(err);
     }
-
-
 
    };
 
@@ -125,9 +117,12 @@ export const login = (country_code,value,props) => {
         dispatch({ type: LOGIN , resData
             // country_code:resData.data.country_code, otpid:resData.data.otpid, phoneno:resData.data.phoneno, msg:resData.msg,status:resData.status, statusCode:resData.statusCode
         })
+
+        return Promise.resolve(resData)
             
         } catch (error) {
             console.error("Error in login", error);
+            return Promise.reject(error)
         }
         
         
@@ -158,27 +153,14 @@ export const verifyOtpLogin = (formdata) => {
             // console.log("Token is: " + resData.idToken)
 
             dispatch({type: VERIFY_OTP_LOGIN, msg:resData.msg, status:resData.status, statusCode: resData.statusCode, otpid:resData.otpid })
-    
+            
+            return Promise.resolve(resData)
 
-        }catch(err){
-            console.error("Error in VerifyOtp", err)
+        }catch(error){
+            console.error("Error in VerifyOtp", error)
+            return Promise.reject(error)
         }
         };
-
-    // return async dispatch => {
-    //     // try {
-    //     //     const response = await fetch('https://easyshop-5pbk.onrender.com/auth/login/verify-otp', {
-    //     //         method: 'POST',
-    //     //         body: formdata,
-    //     //     });
-    //     //     const resData = await response.json();
-    //     //     dispatch({ type: VERIFY_OTP_LOGIN, resData });
-    //     // } catch (error) {
-    //     //     console.error('Error during OTP verification:', error);
-    //     // }
-    // };
-
-
 }
 
 
@@ -211,9 +193,11 @@ export const resendOtp = (otpid) => {
         dispatch({ type: RESEND_OTP , resData, msg:resData.msg, status:resData.status, statusCode:resData.statusCode
             // country_code:resData.data.country_code, otpid:resData.data.otpid, phoneno:resData.data.phoneno, msg:resData.msg,status:resData.status, statusCode:resData.statusCode
         })
+        return Promise.resolve(resData)
             
         } catch (error) {
             console.error("Error in Resend Otp", err)
+            return Promise.reject(error)
         }
 
        

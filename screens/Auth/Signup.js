@@ -15,7 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import CustomeButton from '../../components/CustomeButton';
 import Input from '../../components/UI/Input';
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import * as AuthAction from '../../store/Actions/Auth'
 
@@ -38,10 +38,13 @@ const Signup = (props) => {
     const [showPassword, setShowPassword] = useState(false)
     const [checkBox, setCheckBox] = useState(false)
 
+    const statusRegister = useSelector(state=>state.auth.statusRegister)
+    const signUpData = useSelector(state=>state.auth.signUpData)
+
 
     const dispatch = useDispatch()
 
-
+   
 
     const Validation = Yup.object({
         firstName: Yup.string()
@@ -84,11 +87,39 @@ const Signup = (props) => {
         console.log("country_code is=====>", values.country_code);
         setValidate(checkValid ? checkValid : false);
 
+        dispatch(AuthAction.signUp(formData)).then((res) => {
 
-        if (dispatch(AuthAction.signUp(formData))) {
+            console.log("hghdh", res)
+            if(res.status==='success'){
+                props.navigation.navigate('Otp')
+                Alert.alert(res.msg)
+            }else{
+                Alert.alert(res.msg)
+            }
+        })
 
-            props.navigation.navigate('Otp');
-        }
+
+        // if (dispatch(AuthAction.signUp(formData))) {
+
+        //     console.log("statusRegister",statusRegister)
+
+        //     if(statusRegister === "success"){
+        //         props.navigation.navigate('Otp');
+        //     }else{
+        //         if(signUpData.msg === "User already exists👀"){
+        //             Alert.alert("Already Register!!", "Dear friend you are already register with this number")
+        //         }
+        //     }
+
+        //     // if(statusRegister === "success"){
+        //     //     Alert.alert("Already Register!!", "Dear friend you are already register with this number")
+        //     // }else if(statusRegister === "error"){
+        //     //         Alert.alert("Error Occured","you have an Error in form or you are already register with this number")
+        //     // }else if(msg === "User already exists👀"){
+        //     //     ToastAndroid.ToastAndroid("Dear Friend You are already register with this number")
+        //     // }
+        
+        // }
 
         // if (checkValid === true) {
         //     try {

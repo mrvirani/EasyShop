@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Dimensions, ToastAndroid, Alert } from 'react-native'
 import React, { useRef, useState } from 'react'
 
 import CustomeButton from '../../components/CustomeButton'
@@ -28,10 +28,12 @@ const PhoneLogin = (props) => {
     const phoneInput = useRef()
     const navigation = useNavigation()
 
+    const LoginResData = useSelector(state => state.auth.loginData) //login response data
+
     const msg = useSelector(state => state.auth.msg)
 
 
-    const CreateAccountHandler = async (props) => {
+    const CreateAccountHandler = (props) => {
 
         const checkValid = phoneInput.current?.isValidNumber(value)
         const country_code = "+" + phoneInput.current?.getCallingCode();
@@ -39,14 +41,23 @@ const PhoneLogin = (props) => {
         setShowMessage(true)
         console.log("msg", msg)
 
+        navigation.navigate('OtpLogin')
 
         // if (valid === true) {
         //     props.navigation.navigate('Otp')
+        // } else {
+        //     Alert.alert("enter phone number ")
         // }
 
         console.log(country_code, "<====>", value)
-        await dispatch(LoginAction.login(country_code, value))
-        navigation.navigate('OtpLogin' )
+        dispatch(LoginAction.login(country_code, value))
+
+
+        // if (valid === false) {
+        //     Alert.alert("Invalid Phone Number", "You have not Enter Phone Number correctly")
+        // } else if (valid === true) {
+        //     navigation.navigate('OtpLogin')
+        // }
 
         // if())){
         // } 
@@ -84,8 +95,6 @@ const PhoneLogin = (props) => {
                             withShadow
                             autoFocus
 
-
-
                         />
 
 
@@ -97,6 +106,7 @@ const PhoneLogin = (props) => {
 
 
                 </View>
+
                 {showMessage && (
                     <View style={styles.message}>
                         <Text>Value : {value}</Text>
@@ -104,6 +114,7 @@ const PhoneLogin = (props) => {
                         <Text>Formated Number : {formatedNumber}</Text>
                     </View>
                 )}
+
             </View>
             <View >
 
@@ -115,9 +126,6 @@ const PhoneLogin = (props) => {
             </View>
 
 
-            {/* <CustomeButton >
-                    send Otp
-                </CustomeButton> */}
 
         </View>
 
