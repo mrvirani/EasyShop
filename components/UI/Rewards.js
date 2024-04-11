@@ -18,8 +18,7 @@ const Rewards = () => {
 
     <View style={{ flex: 1 }}>
 
-      <CustomeButton style={{ alignItems:'center' }} onPress={setHandler}
-      >click here</CustomeButton>
+      <CustomeButton style={styles.button} onPress={setHandler}> click here </CustomeButton>
 
       <Modal
         isVisible={visible}
@@ -38,15 +37,7 @@ const Rewards = () => {
       </Modal>
     </View>
 
-    // <View style={styles.screen}>
-    //   <View style={styles.container}>
 
-    //     <Image source={require('../../images/Giftcard-bro.png')} style={{width:width*0.65, height:height*0.35}} />
-    //   <Text numberOfLines={2} style={{color:'black', fontSize:16, alignItems:'center'}}>You are Rewarded 50 points of this poll</Text>
-    //   <View style={{width:250, borderColor:'black', borderWidth:0.5, marginVertical:10}}></View>
-    //     <Text style={styles.btn}>Okay!</Text>
-    //   </View>
-    // </View>
   )
 }
 
@@ -60,6 +51,11 @@ const styles = StyleSheet.create({
   //   justifyContent:'center',
   //   elevation:5,
   // },
+
+  button:{
+    alignItems:'center' 
+  },
+
   container: {
     // borderColor:'black',
     // borderWidth:1,

@@ -4,7 +4,7 @@ import React from 'react'
 export default function CustomeButton(props) {
   return (
 
-    <Pressable onPress={props.onPress}>
+    <Pressable onPress={props.onPress} disabled={props.disabled}>
       <View style={[styles.Button, props.style]}>
         <Text style={styles.ButtonText}>{props.children}</Text>
       </View>

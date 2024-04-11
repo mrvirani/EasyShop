@@ -1,7 +1,7 @@
 
 
 
-import { SIGN_UP, VERIFY_OTP_REGISTER ,LOGIN, VERIFY_OTP_LOGIN} from "../Actions/Auth";
+import { SIGN_UP, VERIFY_OTP_REGISTER ,LOGIN, VERIFY_OTP_LOGIN,RESEND_OTP} from "../Actions/Auth";
 
 const initialState = {
     signUpData: null, // Initial state for signed up data
@@ -10,7 +10,12 @@ const initialState = {
     msg: null,
     statusCode: null, 
     otpid:null,
-    statusRegister:null,loginData:null
+    statusRegister:null,
+    statusLogin:null,
+    loginData:null,
+    Resendmsg:null,
+    ResendstatusCode:null,
+    Resendotpid:null
 
 
 };
@@ -29,6 +34,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 signUpData: action.resData,
+                otpid:action.otpid
                 
             }
         }
@@ -36,7 +42,7 @@ export default (state = initialState, action) => {
         case VERIFY_OTP_REGISTER: {
             return {
                 ...state,
-                status:action.status,
+                statusRegister:action.status,
                 msg: action.msg,
                 statusCode:action.statusCode
             };
@@ -59,18 +65,19 @@ export default (state = initialState, action) => {
         case VERIFY_OTP_LOGIN:{
             return {
                 ...state,
-                status:action.status,
+                statusLogin:action.status,
                 msg:action.msg,
                 statusCode:action.statusCode,
                 otpid:action.otpid
-
             }
         }
 
         case RESEND_OTP:{
             return {
                 ...state,
-                otpid:action.resData
+                Resendmsg:action.msg,
+                ResendstatusCode:action.statusCode,
+                Resendotpid:action.otpid
             }
         }
         

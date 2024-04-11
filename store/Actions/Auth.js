@@ -9,15 +9,17 @@ export const VERIFY_OTP_REGISTER = 'VERIFY_OTP_REGISTER'
 
 export const VERIFY_OTP_LOGIN = 'VERIFY_OTP_LOGIN'
 
+export const RESEND_OTP = 'RESND_OTP'
+
 
 export const signUp = (formdata) => {
 
-
-    console.log("signUp======>",formdata)
+    console.log("signUp ======>",formdata)
 
     return async (dispatch) => {
 
-        const response = await fetch('https://easyshop-5pbk.onrender.com/auth/register',
+        try{
+            const response = await fetch('https://easyshop-5pbk.onrender.com/auth/register',
             {
                 method: 'POST',
                 body: formdata
@@ -31,9 +33,13 @@ export const signUp = (formdata) => {
 
         console.log("resData: signUP===>",resData)
 
-        console.log("Token is NOT GENERATED IN SIGNUP SCREEN: " + resData.idToken)
+        
+        dispatch({ type: SIGN_UP, resData, otpid:resData.data.otpid })
+        }catch(err){
+            console.error("You have error in SignUp", err);
+        }
 
-        dispatch({ type: SIGN_UP, resData })
+        
 
     }
 
@@ -62,51 +68,19 @@ export const verifyOtpRegister = (formdata) => {
     console.log("verifyOtpRegister=======>",formdata)
 
     return async dispatch => {
-    //     // try {
-    //         const response = await fetch('https://easyshop-5pbk.onrender.com/auth/register/verify-otp', {
-    //             method: 'POST',
-    //             body: formdata,
-    //         });
-
-    //         const resData = await response.json();
-
-
-
-    //         console.log("response DATA OF VERIFY OTP====>", response)
-
-    //         console.log("resData VERIFY OTP:===>",resData)
-    
-    //         console.log("Token is: " + resData.idToken)
-
-    //         dispatch({type: VERIFY_OTP_REGISTER, msg:resData.msg, status:resData.status, statusCode: resData.statusCode})
-
-
-
-
-
-
-    //     //       if (resData && resData.status === 'success') {
-    //     //         // OTP verification successful
-    //     //         dispatch({ type: VERIFY_OTP_REGISTER, resData,success: true });
-    //     //     } else {
-    //     //         // OTP verification failed
-    //     //         dispatch({ type: VERIFY_OTP_REGISTER,resData, success: false });
-    //     //     }
-    //     // } catch (error) {
-    //     //     console.error('Error during OTP verification:', error);
-    //     //     return false; // Return false for failure
-    //     // }
-
-
+  
     try {
+        
         const response = await fetch('https://easyshop-5pbk.onrender.com/auth/register/verify-otp', {
             method: 'POST',
             body: formdata,
         });
         const resData = await response.json();
-        dispatch({ type: VERIFY_OTP_REGISTER, resData });
-    } catch (error) {
-        console.error('Error during OTP verification:', error);
+        dispatch({ type: VERIFY_OTP_REGISTER, resData , 
+            msg:resData.msg, status:resData.status, statusCode: resData.statusCode});
+
+    } catch (err) {
+       console.error("You have an error in verify register otp ", err)
     }
 
 
@@ -121,8 +95,11 @@ export const login = (country_code,value,props) => {
     console.log(country_code +"<=====>"+value)
 
     return async dispatch => {
+        
 
-        const response = await fetch('https://easyshop-5pbk.onrender.com/auth/login',
+        try {
+
+            const response = await fetch('https://easyshop-5pbk.onrender.com/auth/login',
             {
                 method: 'POST',
                 headers: {
@@ -148,6 +125,11 @@ export const login = (country_code,value,props) => {
         dispatch({ type: LOGIN , resData
             // country_code:resData.data.country_code, otpid:resData.data.otpid, phoneno:resData.data.phoneno, msg:resData.msg,status:resData.status, statusCode:resData.statusCode
         })
+            
+        } catch (error) {
+            console.error("Error in login", error);
+        }
+        
         
     }
   
@@ -160,6 +142,8 @@ export const verifyOtpLogin = (formdata) => {
 
     return async dispatch => {
         // try {
+
+        try{
             const response = await fetch('https://easyshop-5pbk.onrender.com/auth/login/verify-otp', {
                 method: 'POST',
                 body: formdata,
@@ -174,7 +158,12 @@ export const verifyOtpLogin = (formdata) => {
             // console.log("Token is: " + resData.idToken)
 
             dispatch({type: VERIFY_OTP_LOGIN, msg:resData.msg, status:resData.status, statusCode: resData.statusCode, otpid:resData.otpid })
-    };
+    
+
+        }catch(err){
+            console.error("Error in VerifyOtp", err)
+        }
+        };
 
     // return async dispatch => {
     //     // try {
@@ -195,9 +184,15 @@ export const verifyOtpLogin = (formdata) => {
 
 export const resendOtp = (otpid) => {
 
+
+
     return async dispatch => {
 
-        const response = await fetch('https://easyshop-5pbk.onrender.com/auth/resendOtp',
+        console.log("Action file otpid", otpid)
+
+        try {
+
+            const response = await fetch('https://easyshop-5pbk.onrender.com/auth/resendOtp',
             {
                 method: 'POST',
                 headers: {
@@ -211,9 +206,17 @@ export const resendOtp = (otpid) => {
 
         const resData = await response.json()
 
-        dispatch({ type: LOGIN , resData
+        console.log("resData", resData.msg,resData.status,resData.statusCode)
+
+        dispatch({ type: RESEND_OTP , resData, msg:resData.msg, status:resData.status, statusCode:resData.statusCode
             // country_code:resData.data.country_code, otpid:resData.data.otpid, phoneno:resData.data.phoneno, msg:resData.msg,status:resData.status, statusCode:resData.statusCode
         })
+            
+        } catch (error) {
+            console.error("Error in Resend Otp", err)
+        }
+
+       
         
     }
   

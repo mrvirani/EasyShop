@@ -12,9 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as otpAction from '../../store/Actions/Auth'
 import { TouchableNativeFeedback } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native'
+
 const { width, height } = Dimensions.get('window')
 
-const Otp = ({ route, navigation }) => {
+const Otp = ({ route }) => {
 
     // const { resData } = route.params;
     // const dispatch = useDispatch();
@@ -23,11 +25,15 @@ const Otp = ({ route, navigation }) => {
     const [otp, setOtp] = useState('');
     const [wholeOtp, setWholeOtp] = useState('')
 
+    const [error, setError] = useState()
+
     const SelectStatus = useSelector(state => state.statusRegister) // sign up data status: success or error
 
     console.log("SelectStatus===>", SelectStatus)
 
     const [performAction, setPerformAction] = useState();
+
+    const navigation = useNavigation()
 
 
     // const [performAction, setPerformAction] = useState(SelectStatus === "success" ? setPerformAction("login") : setPerformAction("register"))
@@ -36,12 +42,24 @@ const Otp = ({ route, navigation }) => {
 
     const dispatch = useDispatch();
 
-    const statusOfOtp = useSelector(state => state.auth.signUpData)    //response data of signup // user register karse tyarno
+    const statusRegister = useSelector(state => state.auth.statusRegister) //Registration status response data
+    const msg = useSelector(state => state.auth.msg) //Registration msg response data
+    const statusCode = useSelector(state => state.auth.statusCode) //Registration status code response data
 
+    console.log("RegisterResData=====>", statusRegister, msg,statusCode)
+
+    const Resendmsg = useSelector(state => state.auth.Resendmsg) //REND status response data
+    const ResendstatusCode = useSelector(state => state.auth.ResendstatusCode) //Resend msg response data
+    const Resendotpid = useSelector(state => state.auth.Resendotpid) //RESEND status code response data
+
+
+    console.log("ResendResData=====>", Resendmsg, ResendstatusCode,Resendotpid)
+
+    const statusOfOtp = useSelector(state => state.auth.signUpData)    //response data of signup // user register karse tyarno
 
     console.log("statusOfOtp===>", statusOfOtp)
 
-    const STATUSOFOTP = useSelector(state => state.auth.status)   //
+    const STATUSOFOTP = useSelector(state => state.auth.status) 
 
     console.log("STATUSOFOTP====>", STATUSOFOTP)
 
@@ -51,13 +69,15 @@ const Otp = ({ route, navigation }) => {
 
     const STATUSOFOTPLOGIN = useSelector(state => state.auth.status)
 
-    const OTPID = useSelector(state=>state.auth.)
+    const OTPID = useSelector(state => state.auth.otpid)  // signup user otpid
+    console.log("OTPID===>", OTPID)
 
-    useEffect(() => {
-        // Determine the initial value for performAction based on SelectStatus
-        const initialPerformAction = SelectStatus === "success" ? "login" : "register";
-        setPerformAction(initialPerformAction);
-    }, [SelectStatus]);
+
+    // useEffect(() => {
+    //     // Determine the initial value for performAction based on SelectStatus
+    //     const initialPerformAction = SelectStatus === "success" ? "login" : "register";
+    //     setPerformAction(initialPerformAction);
+    // }, [SelectStatus]);
 
 
 
@@ -71,153 +91,61 @@ const Otp = ({ route, navigation }) => {
         return PlacehoderDots
     }
 
-
-    // const email = statusOfOtp?.data?.email;
-
     const OtpVerifyHandler = (props) => {
 
         let formData = new FormData();
 
-        // if (performAction === "login") {
+        formData.append('role', 1)
+        formData.append('email', statusOfOtp.data.email);
+        formData.append('country_code', statusOfOtp.data.country_code);
+        formData.append('phoneno', statusOfOtp.data.phoneno);
+        formData.append('hashedPassword', statusOfOtp.data.password);
+        formData.append('firstname', statusOfOtp.data.firstname);
+        formData.append('lastname', statusOfOtp.data.lastname);
+        formData.append('imageUrl', statusOfOtp.data.image);
+        formData.append('otpid', statusOfOtp.data.otpid);
+        formData.append('enteredotp', wholeOtp);
 
-
-        //     formData.append('country_code', LoginResData.data.country_code);
-        //     formData.append('phoneno', LoginResData.data.phoneno),
-        //         formData.append('otpid', LoginResData.data.otpid),
-        //         formData.append('enteredotp', wholeOtp)
-
-        //     dispatch(otpAction.verifyOtpLogin(formData))
-
-
-        // } else if (performAction === "register") {
-
-
-            formData.append('role', 1)
-            formData.append('email', statusOfOtp.data.email);
-            formData.append('country_code', statusOfOtp.data.country_code);
-            formData.append('phoneno', statusOfOtp.data.phoneno);
-            formData.append('hashedPassword', statusOfOtp.data.password);
-            formData.append('firstname', statusOfOtp.data.firstname);
-            formData.append('lastname', statusOfOtp.data.lastname);
-            formData.append('imageUrl', statusOfOtp.data.image);
-            formData.append('otpid', statusOfOtp.data.otpid);
-            formData.append('enteredotp', wholeOtp);
-
-            // props.navigation.navigate('Login')
-            if(dispatch(otpAction.verifyOtpRegister(formData))){
-                // props.navigation.navigate('Login')
+        try{
+            if( dispatch(otpAction.verifyOtpRegister(formData))){
+                navigation.navigate('Login')
+    
             }
 
+        }catch(err){
+            console.error("Error verifying OTP:", error);
+            Alert.alert("Error", "An error occurred while verifying OTP. Please try again.");
+        }
+       
 
+       
 
-        // }
-
-
-
-
-
-
-
-
-
-        // dispatch(otpAction.verifyOtpRegister([
-        //     statusOfOtp.data.email, 
-        //     "1",
-        //     statusOfOtp.data.country_code,
-        //     statusOfOtp.data.phoneno,
-        //     statusOfOtp.data.hashedPassword,
-        //     statusOfOtp.data.lastname,
-        //     statusOfOtp.data.firstname,
-        //     statusOfOtp.data.image,
-        //     statusOfOtp.data.otpid,
-        //     wholeOtp,
-        //     statusOfOtp.data.msg,
-        //     statusOfOtp.data.statusCode,
-        //     statusOfOtp.data.status, 
-        // ]
-
-        //     ))
-
-
-
-
-        // const responseData = dispatch(verifyOtp.verifyOtpRegister(formdata))
-        // .then(success => {
-        //     if (success) {
-        //         navigation.navigate('Login');
-        //         Alert.alert("Hase bhai hase....")
-        //     } else {
-        //         // Handle error or show toast
-        //         Alert.alert("TRY AGAIN BRO!!")
-        //     }
-        // });
-
-        // if(responseData.success){
-        //     Alert.alert("Done bro..")
-        // }else{
-        //     Alert.alert("filed to verify try again")
-        // }
     };
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        // if (email) {
-            STATUSOFOTP === "success" && OtpVerifyHandler()
+    //     // if (email) {
+    //     (STATUSOFOTP === "success" || Resendmsg ==="success" ) && OtpVerifyHandler()
 
-                // props.navigation.navigate('Login')
-            
-
-            // else if (STATUSOFOTPLOGIN === "success" && OtpVerifyHandler()) {
-            //     props.navigation.navigate('Login')
-            // }
-            //STATUSOFOTP ==="error" && props.navigation.navigate('Login')
-
-        
-
-    }, [])
+    //     // props.navigation.navigate('Login')
 
 
-    const [countdown, setCountdown] = useState(30)
-    const [timerId, setTimerId] = useState(null); // Timer ID to clear interval
+    //     // else if (STATUSOFOTPLOGIN === "success" && OtpVerifyHandler()) {
+    //     //     props.navigation.navigate('Login')
+    //     // }
+    //     //STATUSOFOTP ==="error" && props.navigation.navigate('Login')
 
-    const startTimer = () => {
-        setCountdown(30); 
-  
-    if (timerId !== null) {
-        clearInterval(timerId);
-    }
+    // }, [STATUSOFOTP, Resendmsg])
 
-    const newTimerId = setInterval(() => {
-        setCountdown(prevCountdown => {
-            if (prevCountdown > 0) {
-                return prevCountdown - 1; 
-            } else {
-                clearInterval(newTimerId); // Stop the timer 
-                return 0; 
-            }
-        });
-    }, 1000);
 
-     // Update timerId state with the new interval ID
-     setTimerId(newTimerId);
 
-    };
-
-    // Function to handle Resend OTP button click
-    const handleResendOtp = () => {
-        startTimer(); // Start the timer
-        // Add logic to resend OTP
+    const ResendotpHandler = () => {
         console.log("hello")
-        dispatch(otpAction.resendOtp(otpid))
-    };
-
-    useEffect(() => {
-        return () => {
-            clearInterval(timerId);
-        };
-    }, []);
-
+       
+            dispatch(otpAction.resendOtp(statusOfOtp.data.otpid))
+      
+    }
 
 
 
@@ -280,12 +208,16 @@ const Otp = ({ route, navigation }) => {
                         <Text style={{ fontSize: 14 }}>Having Problem?</Text>
                         {/* <Text style={{ color: "black", fontSize: 14, }}> Resend Code</Text> */}
                         {/* <TouchableOpacity style={{}}> */}
-                            <Text  onPress={handleResendOtp} disabled={ countdown > 0 && countdown< 30}  style={{  height:30,color: countdown > 0 || countdown < 30 ? "#635e5e" : "black", fontSize: 14, }}>Resend OTP</Text>
+                        <Text onPress={ResendotpHandler}
+                        //  disabled={ countdown > 0 && countdown< 30} 
+                        //   style={{  height:30,color: countdown > 0 || countdown < 30 ? "#635e5e" : "black",
+                        //    fontSize: 14, }}
+                        >Resend OTP</Text>
                         {/* </TouchableOpacity> */}
 
                     </View>
 
-                   {(countdown > 0 && countdown<30)?  <Text style={{ marginTop: 10 }}>Resend OTP in: {countdown} seconds</Text>: ''}
+                    {/* {(countdown > 0 && countdown<30)?  <Text style={{ marginTop: 10 }}>Resend OTP in: {countdown} seconds</Text>: ''} */}
                 </View>
 
 
@@ -293,7 +225,11 @@ const Otp = ({ route, navigation }) => {
 
 
             <View style={{ alignItems: 'center', marginBottom: 20 }}>
-                <CustomeButton style={{ padding: 15,  }}   onPress={OtpVerifyHandler}>Verify Now</CustomeButton>
+                <CustomeButton style={{ padding: 15, 
+                    // backgroundColor: (statusOfOtp === null) ? "black" : "red"
+                 }} 
+                //  disabled={statusOfOtp === null} 
+                    onPress={OtpVerifyHandler}>Verify Now</CustomeButton>
             </View>
 
 

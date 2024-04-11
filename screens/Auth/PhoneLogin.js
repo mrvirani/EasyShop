@@ -11,7 +11,7 @@ const { width, height } = Dimensions.get('window')
 import * as LoginAction from '../../store/Actions/Auth'
 import { useDispatch, useSelector } from 'react-redux';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
-
+import { useNavigation } from '@react-navigation/native'
 
 
 
@@ -26,30 +26,31 @@ const PhoneLogin = (props) => {
     const [valid, setValid] = useState(false)
     const [showMessage, setShowMessage] = useState(false);
     const phoneInput = useRef()
+    const navigation = useNavigation()
 
     const msg = useSelector(state => state.auth.msg)
 
 
-    const CreateAccountHandler =  (props) => {
+    const CreateAccountHandler = async (props) => {
 
         const checkValid = phoneInput.current?.isValidNumber(value)
         const country_code = "+" + phoneInput.current?.getCallingCode();
         setValid(checkValid ? checkValid : false)
         setShowMessage(true)
-
         console.log("msg", msg)
 
-      
-       
+
         // if (valid === true) {
         //     props.navigation.navigate('Otp')
         // }
 
         console.log(country_code, "<====>", value)
-        if(dispatch(LoginAction.login(country_code, value))){
-            props.navigation.navigate('OtpLogin')
-        } 
-        
+        await dispatch(LoginAction.login(country_code, value))
+        navigation.navigate('OtpLogin' )
+
+        // if())){
+        // } 
+
     }
 
     return (

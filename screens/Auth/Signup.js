@@ -35,7 +35,7 @@ const Signup = (props) => {
     const [validate, setValidate] = useState(false)  // based on library of REACT_NATIVE_PHONE_NUMBER_INPUT
     const phoneInput = useRef()
 
-    const [showPassword, setShowPassword] = useState(false)   
+    const [showPassword, setShowPassword] = useState(false)
     const [checkBox, setCheckBox] = useState(false)
 
 
@@ -66,7 +66,7 @@ const Signup = (props) => {
 
     // console.log(validationSchema)
 
-    const SubmitHandler =  (values, actions) => {
+    const SubmitHandler = (values, actions) => {
         const checkValid = phoneInput.current?.isValidNumber(values.phoneNumber);
         const country_code = "+" + phoneInput.current?.getCallingCode();
         values.country_code = country_code
@@ -85,10 +85,10 @@ const Signup = (props) => {
         setValidate(checkValid ? checkValid : false);
 
 
-         if(dispatch(AuthAction.signUp(formData))){
+        if (dispatch(AuthAction.signUp(formData))) {
 
-             props.navigation.navigate('Otp');
-         }
+            props.navigation.navigate('Otp');
+        }
 
         // if (checkValid === true) {
         //     try {
@@ -239,12 +239,12 @@ const Signup = (props) => {
                                 </View>
 
                                 <View style={{ flex: 1, alignItems: 'center' }}>
-
                                     <CustomeButton onPress={handleSubmit} style={styles.Submitbtn} >Submit</CustomeButton>
                                 </View>
 
-                                <View style={{ alignItems: 'center' }}>
+                                <View style={{ justifyContent:'center', flexDirection:'row' }}>
                                     <Text>Already have an account?</Text>
+                                    <Text style={{color:'black'}} onPress={() => props.navigation.navigate('Login')}> Login</Text>
                                 </View>
 
 

@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as otpAction from '../../store/Actions/Auth'
 import { TouchableNativeFeedback } from 'react-native';
 
+
+import { useNavigation } from '@react-navigation/native'
+
 const { width, height } = Dimensions.get('window')
 
 const OtpLogin = ({ route, navigation }) => {
@@ -20,22 +23,28 @@ const OtpLogin = ({ route, navigation }) => {
     const [otp, setOtp] = useState('');
     const [wholeOtp, setWholeOtp] = useState('')
 
-   
+
 
     // const [performAction, setPerformAction] = useState();
 
 
     const dispatch = useDispatch();
 
-   
- 
+
+  
+
+
+
     const LoginResData = useSelector(state => state.auth.loginData) //login response data
 
     console.log("LoginResData=====>", LoginResData)
 
-    const STATUSOFOTPLOGIN = useSelector(state => state.auth.status)
+    const STATUSOFOTPLOGIN = useSelector(state => state.auth.statusLogin)
 
-   
+    // const OTPID = useSelector(state => state.auth.otpid)  
+    // console.log("OTPID Login===>", OTPID)
+
+
     const renderPlaceholderDots = () => {
         const PlacehoderDots = []
         for (let i = 0; i < 4; i++) {
@@ -47,14 +56,13 @@ const OtpLogin = ({ route, navigation }) => {
     }
 
 
-   
 
-    const OtpVerifyHandler = (props) => {
+
+    const OtpVerifyHandler =  (props) => {
 
         let formData = new FormData();
 
         // if (performAction === "login") {
-
 
         //     formData.append('country_code', LoginResData.data.country_code);
         //     formData.append('phoneno', LoginResData.data.phoneno),
@@ -66,71 +74,88 @@ const OtpLogin = ({ route, navigation }) => {
 
         // } else if (performAction === "register") {
 
+        console.log("===", LoginResData.data.country_code)
+
 
         formData.append('country_code', LoginResData.data.country_code);
         formData.append('phoneno', LoginResData.data.phoneno),
             formData.append('otpid', LoginResData.data.otpid),
             formData.append('enteredotp', wholeOtp)
 
-        if(dispatch(otpAction.verifyOtpLogin(formData))){
+        try {
 
-            props.navigation.navigate('Home')
-            
+            if(dispatch(otpAction.verifyOtpLogin(formData))) {
+                navigation.navigate('Home');
+            }
+            // if (STATUSOFOTPLOGIN === 'success') {
+
+            //     navigation.navigate('Home');
+            // } else {
+            //     Alert.alert("Wrong OTP", "Please enter the proper OTP.");
+            // }
+        } catch (error) {
+
+            console.error("Error verifying OTP:", error);
+            Alert.alert("Error", "An error occurred while verifying OTP. Please try again.");
         }
 
-      
-
 
 
     };
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        STATUSOFOTPLOGIN === "success" && OtpVerifyHandler()
+    //     STATUSOFOTPLOGIN === "success" && OtpVerifyHandler()
 
-    }, [])
+    // }, [STATUSOFOTPLOGIN])
 
 
-    const [countdown, setCountdown] = useState(30)
-    const [timerId, setTimerId] = useState(null); // Timer ID to clear interval
+    // const [countdown, setCountdown] = useState(30)
+    // const [timerId, setTimerId] = useState(null); // Timer ID to clear interval
 
-    const startTimer = () => {
-        setCountdown(30);
+    // const startTimer = () => {
+    //     setCountdown(30);
 
-        if (timerId !== null) {
-            clearInterval(timerId);
-        }
+    //     if (timerId !== null) {
+    //         clearInterval(timerId);
+    //     }
 
-        const newTimerId = setInterval(() => {
-            setCountdown(prevCountdown => {
-                if (prevCountdown > 0) {
-                    return prevCountdown - 1;
-                } else {
-                    clearInterval(newTimerId); // Stop the timer 
-                    return 0;
-                }
-            });
-        }, 1000);
+    //     const newTimerId = setInterval(() => {
+    //         setCountdown(prevCountdown => {
+    //             if (prevCountdown > 0) {
+    //                 return prevCountdown - 1;
+    //             } else {
+    //                 clearInterval(newTimerId); // Stop the timer 
+    //                 return 0;
+    //             }
+    //         });
+    //     }, 1000);
 
-        // Update timerId state with the new interval ID
-        setTimerId(newTimerId);
+    //     // Update timerId state with the new interval ID
+    //     setTimerId(newTimerId);
 
-    };
+    // };
 
-    // Function to handle Resend OTP button click
-    const handleResendOtp = () => {
-        startTimer(); // Start the timer
-        // Add logic to resend OTP
-        console.log("hello")
-    };
+    // // Function to handle Resend OTP button click
+    // const handleResendOtp = () => {
+    //     startTimer(); // Start the timer
+    //     // Add logic to resend OTP
+    //     console.log("hello")
+    // };
 
-    useEffect(() => {
-        return () => {
-            clearInterval(timerId);
-        };
-    }, []);
+    // useEffect(() => {
+    //     return () => {
+    //         clearInterval(timerId);
+    //     };
+    // }, []);
 
+
+    const otpHandler = () => {
+        console.log("hello otp login")
+        console.log(LoginResData.data.otpid)
+        dispatch(otpAction.resendOtp(LoginResData.data.otpid))
+    }
 
 
 
@@ -193,12 +218,16 @@ const OtpLogin = ({ route, navigation }) => {
                         <Text style={{ fontSize: 14 }}>Having Problem?</Text>
                         {/* <Text style={{ color: "black", fontSize: 14, }}> Resend Code</Text> */}
                         {/* <TouchableOpacity style={{}}> */}
-                        <Text onPress={handleResendOtp} disabled={countdown > 0 && countdown < 30} style={{ height: 30, color: countdown > 0 || countdown < 30 ? "#635e5e" : "black", fontSize: 14, }}>Resend OTP</Text>
+
+                        <Text onPress={otpHandler}
+                        // disabled={countdown > 0 && countdown < 30} style={{ height: 30, color: countdown > 0 || countdown < 30 ? "#635e5e" : "black", fontSize: 14, }}
+                        >Resend OTP</Text>
+
                         {/* </TouchableOpacity> */}
 
                     </View>
 
-                    {(countdown > 0 && countdown < 30) ? <Text style={{ marginTop: 10 }}>Resend OTP in: {countdown} seconds</Text> : ''}
+                    {/* {(countdown > 0 && countdown < 30) ? <Text style={{ marginTop: 10 }}>Resend OTP in: {countdown} seconds</Text> : ''} */}
                 </View>
 
 
