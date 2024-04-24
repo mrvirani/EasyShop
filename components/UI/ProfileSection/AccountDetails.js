@@ -32,28 +32,28 @@ const AccountDetails = (props) => {
 
     const navigation = useNavigation()
 
-    const getUserData = useSelector(state=> state.auth.userData)
+    const getUserData = useSelector(state => state.auth.userData)
 
     useEffect(() => {
         dispatch(showuserdetailsAction.getUserDetails())
 
-        console.log("resData's phoneno===>",getUserData.data.userDetails.phoneno)
+        console.log("resData's phoneno===>", getUserData.data.userDetails.phoneno)
 
         setFirstName(getUserData.data.userDetails.firstname)
         setLastName(getUserData.data.userDetails.lastname)
         setEmail(getUserData.data.userDetails.email)
         setPhoneNo(getUserData.data.userDetails.phoneno)
 
-        console.log("phoneNo====>",phoneNo)
+        console.log("phoneNo====>", phoneNo)
 
     }, [dispatch])
 
-   
+
 
     const saveHandler = (props) => {
         // let formdata = new FormData();
 
-    
+
 
         console.log("Account details screen log for state data", firstName + "|" + lastName + "|" + email + "|" + phoneNo)
 
@@ -64,16 +64,17 @@ const AccountDetails = (props) => {
         // formdata.append('email', email)
         // formdata.append('phoneNo', phoneNo)
 
-      {isEditable  && dispatch(updateuserAction.updateuserDetails(firstName, lastName, email, phoneNo)).then((res) => {
+        {
+            isEditable && dispatch(updateuserAction.updateuserDetails(firstName, lastName, email, phoneNo)).then((res) => {
 
-            console.log("mali gayo data", res)
-            if (res.status === 'success') {
-
-                Alert.alert(res.msg)
-            } else {
-                Alert.alert(res.msg)
-            }
-        })}
+                console.log("mali gayo data", res)
+                if (res.status === 'success') {
+                    Alert.alert(res.msg)
+                } else {
+                    Alert.alert(res.msg)
+                }
+            })
+        }
 
         setIsEditable(true)
 
@@ -107,7 +108,7 @@ const AccountDetails = (props) => {
     return (
         <View style={StyleSheet.screen}>
             <View style={styles.header}>
-            <MaterialIcons name='keyboard-backspace' color='black' size={25} style={styles.icon} onPress={() => navigation.goBack()} />
+                <MaterialIcons name='keyboard-backspace' color='black' size={25} style={styles.icon} onPress={() => navigation.goBack()} />
                 <Text style={styles.headerTitle}>Account details</Text>
             </View>
 
@@ -141,7 +142,7 @@ const AccountDetails = (props) => {
                         value={firstName}
                         onChangeText={(text) => setFirstName(text)}
                         placeholder='e.g. Maulik'
-                        editable={!isEditable ? false :true }
+                        editable={!isEditable ? false : true}
                     />
 
                     <Text style={styles.title}>Last Name</Text>
@@ -150,7 +151,7 @@ const AccountDetails = (props) => {
                         value={lastName}
                         onChangeText={(text) => setLastName(text)}
                         placeholder='e.g. Virani'
-                        editable={!isEditable ? false :true}
+                        editable={!isEditable ? false : true}
                     />
 
                     <Text style={styles.title}>E-mail</Text>
@@ -159,7 +160,7 @@ const AccountDetails = (props) => {
                         value={email}
                         onChangeText={(text) => setEmail(text)}
                         placeholder='e.g. xyz@gmail.com'
-                        editable={!isEditable ? false :true}
+                        editable={!isEditable ? false : true}
                     />
 
                     <Text style={styles.title}>Phone Number</Text>
@@ -169,7 +170,7 @@ const AccountDetails = (props) => {
                         defaultCode='IN'
                         value={phoneNo}
                         onChangeText={(text) => setPhoneNo(text)}
-                        editable={!isEditable ? false :true}
+                        editable={!isEditable ? false : true}
                         // onChangeFormattedText={(text) => {}}
                         withShadow
                         containerStyle={{
@@ -177,7 +178,7 @@ const AccountDetails = (props) => {
                             height: 50,
                             borderRadius: 50,
                             marginBottom: 10,
-                            borderColor:'#dbdbdb',
+                            borderColor: '#dbdbdb',
                             backgroundColor: '#F3F2F3',
                             borderWidth: 1,
                             borderColor: '#eae3e3',
@@ -192,7 +193,7 @@ const AccountDetails = (props) => {
                 </View>
                 <View style={styles.buttonContainer}>
 
-                <CustomeButton style={styles.saveBtn} onPress={saveHandler}>{!isEditable? "Edit Details": "Save"}</CustomeButton>
+                    <CustomeButton style={styles.saveBtn} onPress={saveHandler}>{!isEditable ? "Edit Details" : "Save"}</CustomeButton>
                 </View>
 
 
@@ -223,16 +224,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    icon:{
-        left:10,
-        lineHeight: 60 
+    icon: {
+        left: 10,
+        lineHeight: 60
     },
 
-    headerTitle:{
-        flex: 1, 
-        lineHeight: 60, 
-        textAlign: 'center', 
-        fontSize: 20, 
+    headerTitle: {
+        flex: 1,
+        lineHeight: 60,
+        textAlign: 'center',
+        fontSize: 20,
         color: 'black'
     },
 
@@ -240,43 +241,43 @@ const styles = StyleSheet.create({
         flex: 1,
         alignIt: 'flex-end',
         padding: 20,
-        marginHorizontal: 10,height:Dimensions.get('window').height*0.82
+        marginHorizontal: 10, height: Dimensions.get('window').height * 0.82
     },
 
-    imageContainer:{
-        width: 110, 
-        height: 110, 
-        marginBottom: 10, 
-        marginTop: 10, 
-        alignItems: 'center', 
-        alignSelf: 'center', 
-        justifyContent: 'flex-end', 
-        flexDirection: 'row' 
+    imageContainer: {
+        width: 110,
+        height: 110,
+        marginBottom: 10,
+        marginTop: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'flex-end',
+        flexDirection: 'row'
     },
 
-    profileImage:{
-        width: 100, 
-        height: 100, 
+    profileImage: {
+        width: 100,
+        height: 100,
         borderRadius: 50
     },
 
-    editImagesIconContainer:{
-            width: 35, 
-            height: 35, 
-            position: 'absolute', 
-            bottom: 6, 
-            alignSelf: 'flex-end', 
-            justifyContent: 'center', 
-            backgroundColor: '#FC2779', 
-            borderRadius: 50, 
-            elevation: 7, 
+    editImagesIconContainer: {
+        width: 35,
+        height: 35,
+        position: 'absolute',
+        bottom: 6,
+        alignSelf: 'flex-end',
+        justifyContent: 'center',
+        backgroundColor: '#FC2779',
+        borderRadius: 50,
+        elevation: 7,
         borderColor: '#FC2779'
     },
 
-    editIcons:{
-        justifyContent: 'center', 
-        alignSelf: 'center', 
-        left: 2, 
+    editIcons: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        left: 2,
         alignContent: 'center'
     },
 
@@ -293,8 +294,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
 
-    buttonContainer:{
-        justifyContent:'flex-end'
+    buttonContainer: {
+        justifyContent: 'flex-end'
     },
 
 
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
 
     input: {
         borderWidth: 1,
-        borderColor:'#dbdbdb',
+        borderColor: '#dbdbdb',
         // backgroundColor: 'white',
         borderRadius: 50,
         padding: 10,

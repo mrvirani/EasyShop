@@ -59,7 +59,7 @@ const AuthNavigator = () => {
 
     <NavigationContainer>
 
-      <Stack.Navigator initialRouteName='Role' >
+      <Stack.Navigator >
 
         <Stack.Screen name='Role' component={Role} options={{ headerShown: false }} />
         <Stack.Screen name="Language" component={Language} options={{ headerShown: false }} />
@@ -73,13 +73,14 @@ const AuthNavigator = () => {
         <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="PhoneLogin" component={PhoneLogin} options={{ headerShown: false }} />
-        <Stack.Screen name="Otp" component={Otp} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="Otp" component={Otp} options={{ headerShown: false }} /> */}
         <Stack.Screen name="OtpLogin" component={OtpLogin} options={{ headerShown: false }} />
         <Stack.Screen name="ForgotPassword" component={ForgetPassword} options={{ headerShown: false }} />
         <Stack.Screen name="Rewards" component={Rewards} options={{ headerShown: false }} />
         <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+        <Stack.Screen name='AccountDetails' component={AccountDetails} options={{ headerShown: false }} />
 
-        <Stack.Screen name="PaymentMethods" component={PaymentMethods} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="PaymentMethods" component={PaymentMethods} options={{ headerShown: false }} /> */}
 
 
         {/* <Stack.Screen name="CustomerBottomTabNavigator" component={CustomerBottomTabNavigator} options={{ headerShown: false }} /> */}
@@ -87,7 +88,7 @@ const AuthNavigator = () => {
       </Stack.Navigator>
 
 
-    </NavigationContainer>
+   </NavigationContainer>
 
 
   )
@@ -170,8 +171,8 @@ const PageNavigator = () => {
 
   return (
 
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='AccountDetails'>
+    // <NavigationContainer>
+      <Stack.Navigator initialRouteName='Profile'>
 
         <Stack.Screen name='Profile' component={Profile} options={{ headerShown: false }} />
         <Stack.Screen name="PaymentMethods" component={PaymentMethods} options={{ headerShown: false }} />
@@ -198,11 +199,11 @@ const PageNavigator = () => {
 
       </Stack.Navigator>
 
-    </NavigationContainer>
+    // </NavigationContainer>
 
   )
 }
 
 // export default CustomerBottomTabNavigator
-// export default AuthNavigator
-export default PageNavigator
+export default AuthNavigator
+// export default PageNavigator

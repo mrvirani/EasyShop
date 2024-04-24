@@ -234,26 +234,83 @@ export const getUserDetails = () =>{
 
         try{
 
-            const bearerToken = await AsyncStorage.getItem('userToken');
+            const bearerToken = await AsyncStorage.getItem('accessToken');
 
-            console.log("getUserDetails bearerToken==>" ,bearerToken)
+            console.log("bearerToken==>" ,bearerToken)
+
+
+              const refreshToken = async () => {
+                try {
+                    const refresh = await AsyncStorage.getItem('refreshToken');
+                    console.log('refresh token===>', refresh)
+
+                    const response = await fetch('https://easyshop-5pbk.onrender.com/auth/refreshAccessToken', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ refreshToken: refresh })
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        console.log("New Access Token ===>", data.data.accessToken);
+                        await AsyncStorage.setItem('userToken', data.data.accessToken);
+                        bearerToken = data.data.accessToken; // Update the bearerToken
+                        return true;
+                    } else {
+                        console.log('Failed to refresh token:', data.msg);
+                        return false;
+                    }
+                } catch (error) {
+                    console.log('Error refreshing token:', error);
+                    return false;
+                }
+            };
+
+
 
             const response = await fetch('https://easyshop-5pbk.onrender.com/userprofile/accountdetails',{
                 method: 'GET',
                 headers: {
                   'Authorization':`Bearer ${bearerToken}`,
             }});
-    
             
-            console.log("response getUserDetailss",response)
+            console.log("getUserDetailss",response)
+
+
+            if (response.status === 'error' ) { // Token expired
+                const tokenRefreshed = await refreshToken();
+                if (tokenRefreshed) {
+                    // Retry the getUserDetails request with the new token
+                    const refreshedResponse = await fetch('https://easyshop-5pbk.onrender.com/userprofile/accountdetails', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${bearerToken}`,
+                        }
+                    });
+                    const refreshedResData = await refreshedResponse.json();
+                    console.log("resdata of getUserDetails after token refresh", refreshedResData);
+                    dispatch({ type: GET_USER_DETAILS, resData: refreshedResData });
+                    return Promise.resolve(refreshedResData);
+                } else {
+                    console.log("Failed to refresh token. Unable to fetch user details.");
+                    return Promise.reject("Failed to refresh token");
+                }
+            } else {
+                const resData = await response.json();
+                console.log("else part resdata", resData);
+                dispatch({ type: GET_USER_DETAILS, resData });
+                return Promise.resolve(resData);
+            }
     
-            const resData = await response.json();
+            // const resData = await response.json();
     
-            console.log("resdata of getUserDetails", resData);
+            // console.log("resdata of getUserDetails", resData);
     
-            dispatch({ type: GET_USER_DETAILS, resData})
+            // dispatch({ type: GET_USER_DETAILS, resData})
     
-            return  Promise.resolve(resData);
+            // return  Promise.resolve(resData);
 
         }
         catch(error){

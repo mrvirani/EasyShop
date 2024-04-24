@@ -70,9 +70,14 @@ const OtpLogin = ({ route, navigation }) => {
 
     const handleToken = async (res) => {
         try {
-            console.log("pppppp",res)
-            console.log("accessToken===>", res.data.JWTToken.accessToken)
-            await AsyncStorage.setItem('userToken', res.data.JWTToken.accessToken);
+            console.log("pppppp", res)
+
+            const { accessToken, refreshToken } = res.data.JWTToken;
+            console.log("accessToken===>", accessToken)
+            console.log("refreshToken===>", refreshToken)
+
+            await AsyncStorage.setItem('accessToken', accessToken);
+            await AsyncStorage.setItem('refreshToken', refreshToken);
 
             const bearerToken = await AsyncStorage.getItem('userToken');
 
@@ -88,18 +93,18 @@ const OtpLogin = ({ route, navigation }) => {
 
     const OtpVerifyHandler = (props) => {
 
-      
+
         try {
 
-            console.log("check",  LoginResData.data.country_code, LoginResData.data.phoneno,LoginResData.data.otpid, wholeOtp)
+            console.log("check", LoginResData.data.country_code, LoginResData.data.phoneno, LoginResData.data.otpid, wholeOtp)
             setIsLoading(true)
 
-            dispatch(otpAction.verifyOtpLogin( LoginResData.data.country_code, LoginResData.data.phoneno,LoginResData.data.otpid, wholeOtp )).then((res) => {
+            dispatch(otpAction.verifyOtpLogin(LoginResData.data.country_code, LoginResData.data.phoneno, LoginResData.data.otpid, wholeOtp)).then((res) => {
 
                 setIsLoading(false)
 
 
-                console.log("=======",res)
+                console.log("=======", res)
                 console.log("whole resdata of otp verify at login time for jwt token", res)
                 console.log("whole token", res.data.JWTToken.accessToken)
 
@@ -111,7 +116,6 @@ const OtpLogin = ({ route, navigation }) => {
                 if (res.status === 'success') {
 
                     handleToken(res)
-
 
                     navigation.replace('Profile')
                     Alert.alert(res.msg)
