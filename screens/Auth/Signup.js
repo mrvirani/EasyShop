@@ -1,4 +1,4 @@
-import { Alert, Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 
 import { Formik } from 'formik';
@@ -12,10 +12,11 @@ import PhoneInput from "react-native-phone-number-input";
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import CustomeButton from '../../components/CustomeButton';
+import CustomeButton from '../../components/UI/atoms/CustomeButton';
 import Input from '../../components/UI/Input';
 
 import { useDispatch, useSelector } from 'react-redux'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import * as AuthAction from '../../store/Actions/Auth'
 
@@ -24,7 +25,6 @@ import * as AuthAction from '../../store/Actions/Auth'
 
 
 const Signup = (props) => {
-
 
 
     //     const [password, setPassword] = useState('');  
@@ -38,13 +38,19 @@ const Signup = (props) => {
     const [showPassword, setShowPassword] = useState(false)
     const [checkBox, setCheckBox] = useState(false)
 
-    const statusRegister = useSelector(state=>state.auth.statusRegister)
-    const signUpData = useSelector(state=>state.auth.signUpData)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const statusRegister = useSelector(state => state.auth.statusRegister)
+    const signUpData = useSelector(state => state.auth.signUpData)
+
+    if(value.length >10){
+        Alert.alert("Please Enter valid mobile Number")
+    }
 
 
     const dispatch = useDispatch()
 
-   
+
 
     const Validation = Yup.object({
         firstName: Yup.string()
@@ -75,6 +81,14 @@ const Signup = (props) => {
         values.country_code = country_code
         values.phoneNumber = value
 
+        
+        if (!checkBox) {
+            console.log("Checkbox is unchecked, showing alert");
+            Alert.alert("Checkbox Unchecked", "Please fill the checkbox to proceed.");
+        }
+    
+
+
         let formData = new FormData();
         formData.append('role', 1)
         formData.append('email', values.email);
@@ -87,13 +101,22 @@ const Signup = (props) => {
         console.log("country_code is=====>", values.country_code);
         setValidate(checkValid ? checkValid : false);
 
+
+        setIsLoading(true)
+
+
         dispatch(AuthAction.signUp(formData)).then((res) => {
 
-            console.log("hghdh", res)
-            if(res.status==='success'){
+            setIsLoading(false)
+
+
+            console.log("hghdh", res.msg)
+            if (res.status === 'success') {
                 props.navigation.navigate('Otp')
                 Alert.alert(res.msg)
-            }else{
+            } else {
+                setIsLoading(false)
+
                 Alert.alert(res.msg)
             }
         })
@@ -118,7 +141,7 @@ const Signup = (props) => {
         //     // }else if(msg === "User already exists👀"){
         //     //     ToastAndroid.ToastAndroid("Dear Friend You are already register with this number")
         //     // }
-        
+
         // }
 
         // if (checkValid === true) {
@@ -130,16 +153,35 @@ const Signup = (props) => {
         // }
     }
 
-
+    
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
 
 
     return (
 
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false} >
             <View style={styles.screen}>
+
+                <View style={styles.header}>
+
+                    <MaterialIcons name='keyboard-backspace' color='black' size={25} style={{ flex: 1, marginLeft: 8, lineHeight: 60, }} onPress={() => props.navigation.goBack()} />
+
+                </View>
+
                 <View style={styles.container}>
 
-                    <Text style={styles.title}>Welcome to EasyShop</Text>
+
+
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>Welcome to EasyShop</Text>
+                        <Image source={require('../../images/egg.png')} style={styles.ovelImage} />
+                    </View>
                     <Text style={styles.summary}>And Enjoy life during time you.</Text>
                 </View>
 
@@ -227,7 +269,7 @@ const Signup = (props) => {
                                     />
                                 </View>
 
-                                {!validate ? <Text style={styles.errorText}>Phone number is Required</Text> : null}
+                                {(value.length >10 || value.length==0) ? <Text style={styles.errorText}>Phone number is Required</Text> : null}
 
 
 
@@ -270,12 +312,18 @@ const Signup = (props) => {
                                 </View>
 
                                 <View style={{ flex: 1, alignItems: 'center' }}>
-                                    <CustomeButton onPress={handleSubmit} style={styles.Submitbtn} >Submit</CustomeButton>
+                                    <CustomeButton onPress={handleSubmit}
+                                    style={[
+                                        styles.Submitbtn,
+                                        !checkBox ? styles.disabledSubmitBtn : {}
+                                    ]}
+                                    disabled={!checkBox} 
+                                    >Submit</CustomeButton>
                                 </View>
 
-                                <View style={{ justifyContent:'center', flexDirection:'row' }}>
+                                <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
                                     <Text>Already have an account?</Text>
-                                    <Text style={{color:'black'}} onPress={() => props.navigation.navigate('Login')}> Login</Text>
+                                    <Text style={{ color: 'black' }} onPress={() => props.navigation.navigate('Login')}> Login</Text>
                                 </View>
 
 
@@ -306,7 +354,20 @@ const styles = StyleSheet.create({
     //     marginVertical: 20
     // },
 
+    textContainer: {
+        position: 'relative'
+
+    },
+
+    ovelImage: {
+        position: 'absolute',
+        top: -2,
+        right: "35%",
+        zIndex: 0
+    },
+
     title: {
+        zIndex: 1,
         fontWeight: 'bold',
         color: 'black',
         fontSize: 26
@@ -319,6 +380,7 @@ const styles = StyleSheet.create({
 
     container: {
         padding: 10,
+        top:-20
     },
     input: {
 
@@ -341,7 +403,12 @@ const styles = StyleSheet.create({
 
     Submitbtn: {
         height: 50,
-        marginTop: 70
+        marginTop: 70,
+        // backgroundColor:checkBox === true ?'#FB5193':'#FB5193'
+    },
+
+    disabledSubmitBtn: {
+        backgroundColor: 'gray', // Background color for disabled state
     }
 });
 

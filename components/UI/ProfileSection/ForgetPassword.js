@@ -1,14 +1,14 @@
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
-import CustomeButton from '../CustomeButton'
+import CustomeButton from '../atoms/CustomeButton'
 
-const {width, height} = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 const ForgetPassword = () => {
     return (
         <View style={styles.screen}>
 
-            <View style={{height:height*0.75}}>
+            <View style={{ height: height * 0.75 }}>
 
                 <View style={styles.container}>
 

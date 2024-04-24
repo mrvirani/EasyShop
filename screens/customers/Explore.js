@@ -8,12 +8,10 @@ export default function Explore() {
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
-        <MaterialIcons name='keyboard-backspace' color='black' size={25} style={{ marginLeft: 20, lineHeight: 60, }} onPress={()=>{}}  />
 
-        <Text style={{ flex: 1, lineHeight: 60, textAlign: 'center', fontSize: 20, color: 'black' }}>Explore</Text>
+        <Text style={{ flex: 1, lineHeight: 60, textAlign: 'center',left:20, fontSize: 20, color: 'black' }}>Explore</Text>
 
-
-        <Ionicons name='bag-handle-outline' color='black' size={22} style={{ marginRight: 20, lineHeight: 60, }} onPress={()=>{}}  />
+        <Ionicons name='bag-handle-outline' color='black' size={22} style={{ marginRight: 20,  lineHeight: 60, }} onPress={()=>{}}  />
 
 
       </View>
@@ -26,8 +24,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header:{
-    height: 60, 
+    height: 60,
     justifyContent: 'center',
     flexDirection: 'row',
+    backgroundColor: 'white',
+    alignItems: 'center',
   }
 })

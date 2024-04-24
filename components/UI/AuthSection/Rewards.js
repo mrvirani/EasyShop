@@ -1,6 +1,6 @@
 import { Button, Dimensions, Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import CustomeButton from '../CustomeButton'
+import CustomeButton from '../atoms/CustomeButton'
 
 import Modal from "react-native-modal";
 
@@ -27,7 +27,7 @@ const Rewards = () => {
         backgroundColor='white'>
 
         <View style={styles.container}>
-          <Image source={require('../../images/Giftcard-bro.png')} style={{ width: width * 0.65, height: height * 0.35 }} />
+          <Image source={require('../../../images/Giftcard-bro.png')} style={styles.images} />
           <Text numberOfLines={2} style={{ color: 'black', fontSize: 16, alignItems: 'center' }}>You are Rewarded 50 points of this poll</Text>
           <View style={{ width: 200, borderColor: 'black', borderWidth: 0.5, marginVertical: 10 }}></View>
           <Text style={styles.btn} onPress={setHandler}>Okay!</Text>
@@ -67,6 +67,10 @@ const styles = StyleSheet.create({
     color: '#FB5193',
     fontSize: 18,
     paddingBottom: 10
+  },
+
+  images:{
+       width: width * 0.65, height: height * 0.35 
   }
 
 })

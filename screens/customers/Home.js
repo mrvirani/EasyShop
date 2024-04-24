@@ -17,7 +17,7 @@ export default function Home(props) {
           </View>
         </View>
 
-        <Text style={{ flex: 1, lineHeight: 60, textAlign: 'center', fontSize: 20, color: 'black' }}>Easy Shop</Text>
+        <Text style={{ flex: 1, lineHeight: 60, textAlign: 'center', right:8, fontSize: 20, color: 'black' }}>Easy Shop</Text>
 
         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end', }}>
 
@@ -40,5 +40,7 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     flexDirection: 'row',
+    backgroundColor: 'white',
+    alignItems: 'center',
   }
 })

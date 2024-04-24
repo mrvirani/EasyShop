@@ -1,8 +1,8 @@
 import { Dimensions, Pressable, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import CustomeButton from '../CustomeButton'
+import CustomeButton from '../atoms/CustomeButton'
 
-import { COLORS } from '../../screens/Onboard.js/OnboardingScreen'
+// import { COLORS } from '../../../screens/Onboard.js/OnboardingScreen'
 
 const Role = (props) => {
 
@@ -14,7 +14,7 @@ const Role = (props) => {
     const getButtonBackgroundColor = (currentButton) => {
         return role === currentButton
             ? currentButton === 'Customer' ? "#FB5193" : "#6A65F4"
-            : "#efe8e8";
+            : "#e2dee2";
     }
 
     const SubmitHandler =()=>{
@@ -30,12 +30,12 @@ const Role = (props) => {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <View style={{ height: height * 0.50, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-                <TouchableOpacity style={{ width: width * 0.55, height: 150, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderWidth: 1, marginVertical: 10, backgroundColor: getButtonBackgroundColor('Customer') }} onPress={() => setRole('Customer')}>
-                    <Text>Customer</Text>
+                <TouchableOpacity style={{ width: width * 0.55, height: 150, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderColor: 'black',  marginVertical: 10, backgroundColor: getButtonBackgroundColor('Customer') }} onPress={() => setRole('Customer')}>
+                    <Text style={{fontSize:18, color:'black'}}>Customer</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ width: width * 0.55, height: 150, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderWidth: 1, marginVertical: 10, backgroundColor: getButtonBackgroundColor('Bussiness') }} onPress={() => setRole('Bussiness')}>
-                    <Text>Bussiness</Text>
+                <TouchableOpacity style={{ width: width * 0.55, height: 150, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderColor: 'black', marginVertical: 10, backgroundColor: getButtonBackgroundColor('Bussiness') }} onPress={() => setRole('Bussiness')}>
+                    <Text style={{fontSize:18, color:'black'}}>Bussiness</Text>
                 </TouchableOpacity>
 
                 {/* {

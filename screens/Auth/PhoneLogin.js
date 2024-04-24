@@ -1,7 +1,7 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Dimensions, ToastAndroid, Alert } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity, Dimensions, ToastAndroid, Alert, Image, ActivityIndicator } from 'react-native'
 import React, { useRef, useState } from 'react'
 
-import CustomeButton from '../../components/CustomeButton'
+import CustomeButton from '../../components/UI/atoms/CustomeButton'
 
 import PhoneInput from "react-native-phone-number-input";
 
@@ -12,6 +12,8 @@ import * as LoginAction from '../../store/Actions/Auth'
 import { useDispatch, useSelector } from 'react-redux';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import { useNavigation } from '@react-navigation/native'
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 
 
@@ -28,6 +30,8 @@ const PhoneLogin = (props) => {
     const phoneInput = useRef()
     const navigation = useNavigation()
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const LoginResData = useSelector(state => state.auth.loginData) //login response data
 
     const msg = useSelector(state => state.auth.msg)
@@ -39,18 +43,38 @@ const PhoneLogin = (props) => {
         const country_code = "+" + phoneInput.current?.getCallingCode();
         setValid(checkValid ? checkValid : false)
         setShowMessage(true)
-        console.log("msg", msg)
+   
+        // navigation.navigate('OtpLogin')
 
-        navigation.navigate('OtpLogin')
-
-        // if (valid === true) {
-        //     props.navigation.navigate('Otp')
+        // if (value.length === 10) {
+        //     navigation.navigate('OtpLogin')
         // } else {
         //     Alert.alert("enter phone number ")
+
         // }
 
         console.log(country_code, "<====>", value)
-        dispatch(LoginAction.login(country_code, value))
+
+        setIsLoading(true)
+
+        dispatch(LoginAction.login(country_code, value)).then((res) => {
+
+
+            setIsLoading(false)
+
+            console.log("phone number to login ", res.msg)
+            if (res.status === 'success') {
+                if (value.length === 10) {
+                    navigation.navigate('OtpLogin')
+                } else {
+                    Alert.alert("enter valid phone number ")
+        
+                }
+                Alert.alert(res.msg)
+            } else {
+                Alert.alert(res.msg)
+            }
+        })
 
 
         // if (valid === false) {
@@ -64,16 +88,35 @@ const PhoneLogin = (props) => {
 
     }
 
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
+
+
     return (
 
 
         <View style={styles.screen}>
 
+            <View style={styles.header}>
+
+                <MaterialIcons name='keyboard-backspace' color='black' size={25} style={{ flex: 1, lineHeight: 60, }} onPress={() => navigation.goBack()} />
+
+            </View>
+
             <View style={{ height: height * 0.80 }}>
 
                 <View style={styles.container}>
 
-                    <Text style={styles.title}>Signin with Phone</Text>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>Signin with Phone</Text>
+                        <Image source={require('../../images/egg.png')} style={styles.ovelImage} />
+                    </View>
+
                     <Text style={styles.summary}>Welcome back,You have been missed</Text>
                 </View>
 
@@ -107,18 +150,18 @@ const PhoneLogin = (props) => {
 
                 </View>
 
-                {showMessage && (
+                {/* {showMessage && (
                     <View style={styles.message}>
                         <Text>Value : {value}</Text>
                         <Text>Valid : {valid ? "true" : "false"}</Text>
                         <Text>Formated Number : {formatedNumber}</Text>
                     </View>
-                )}
+                )} */}
 
             </View>
-            <View >
+            <View>
 
-                <View style={{ alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', bottom:-30 }}>
                     <CustomeButton onPress={CreateAccountHandler}
                         style={{ height: 50 }}
                     ><Text >Send OTP</Text></CustomeButton>
@@ -142,11 +185,36 @@ const styles = StyleSheet.create({
         marginHorizontal: 16
     },
 
+    textContainer: {
+        position: 'relative',
+        zIndex: 1
+    },
+
+    ovelImage: {
+        position: 'absolute',
+        right: 185,
+        top: -2,
+        zIndex: 0,
+        transform: [{ rotate: '10deg' }]
+    },
+    header: {
+        height: 40,
+        justifyContent: 'center',
+        flexDirection: 'row',
+    },
+
+    header: {
+        height: 40,
+        justifyContent: 'center',
+        flexDirection: 'row',
+    },
+
     container: {
-        marginVertical: 20
+        marginVertical: 15
     },
 
     title: {
+        zIndex:1,
         fontWeight: 'bold',
         color: 'black',
         fontSize: 26

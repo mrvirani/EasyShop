@@ -30,10 +30,10 @@ const Input = ({ label, error, touched, ...props }) => {
   return (
     <View>
       {label && <Text>{props.lable}</Text>}
-      <TextInput 
-      {...props}
+      <TextInput
+        {...props}
       />
-     {error && touched && <Text style={styles.errorText}>{error}</Text>}
+      {error && touched && <Text style={styles.errorText}>{error}</Text>}
     </View>
   )
 }
