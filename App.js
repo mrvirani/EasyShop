@@ -5,6 +5,7 @@
  * @format
  */
 
+import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
 
 import {
@@ -13,16 +14,16 @@ import {
   Text,
   View,
 } from 'react-native';
-import Home from './screens/customers/Home';
-import ShopNavigator from './navigation/ShopNavigator';
+import Home from './src/screens/customers/Home.js';
+import ShopNavigator from './src/navigation/ShopNavigator.js';
 import SplashScreen from 'react-native-splash-screen';
 
-import {thunk} from 'redux-thunk' 
-import { createStore,combineReducers, applyMiddleware } from 'redux'
+import { thunk } from 'redux-thunk'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 
-import authReducer from './store/Reducers/Auth'
-import { RoleProvider } from './components/UI/atoms/RoleSelector.js';
+import authReducer from './src/utiles/localStorage/store/reducers/Auth.js'
+import { RoleProvider } from './src/components/ui/atoms/RoleSelector.js';
 
 
 
@@ -37,22 +38,22 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 
 function App() {
 
-  useEffect(()=>{
-    if(Platform.OS === 'android'){
+  useEffect(() => {
+    if (Platform.OS === 'android') {
 
       SplashScreen.hide();
     }
-  },[])
-  
+  }, [])
+
 
   return (
-<RoleProvider>
-    <Provider store={store}>
-    
-     <ShopNavigator/>
+    <RoleProvider>
+      <Provider store={store}>
 
-     </Provider>
-     </RoleProvider>
+        <ShopNavigator />
+
+      </Provider>
+    </RoleProvider>
   );
 }
 

@@ -136,5 +136,11 @@ dependencies {
     }
 }
 
+
+// debugImplementation 'com.facebook.flipper:flipper:0.94.0'
+// debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.94.0'
+// debugImplementation 'com.facebook.flipper:flipper-fresco-plugin:0.94.0'
+// debugImplementation 'com.facebook.soloader:soloader:0.10.1'
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
